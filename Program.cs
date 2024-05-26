@@ -1,36 +1,38 @@
 ﻿using System;
+using System.Text;
 
-class Program
+namespace MaskifyString
 {
-    static void Main(string[] args)
+    public static class StringExtensions
     {
-        Console.WriteLine(CountNumbersWithoutFive(1, 9));     
-        Console.WriteLine(CountNumbersWithoutFive(4, 17));    
+        public static string Maskify(this string str)
+        {
+            return MaskString(str, '#');
+        }
+
+        private static string MaskString(string str, char maskChar)
+        {
+            if (string.IsNullOrEmpty(str) || str.Length < 5)
+                return str;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append(maskChar, str.Length - 4);
+            sb.Append(str.Substring(str.Length - 4));
+
+            return sb.ToString();
+        }
     }
 
-    static int CountNumbersWithoutFive(int start, int end)
+    class Program
     {
-        int count = 0;
-        for (int i = start; i <= end; i++)
+        static void Main(string[] args)
         {
-            if (!ContainsDigit(i, 5))
-            {
-                count++;
-            }
+            Console.WriteLine("4556364607935616".Maskify()); 
+            Console.WriteLine("64607935616".Maskify());      
+            Console.WriteLine("1".Maskify());               
+            Console.WriteLine(string.Empty.Maskify());       
+            Console.WriteLine("Skippy".Maskify());           
+            Console.WriteLine("Nananananananananananananananana Batman!".Maskify()); 
         }
-        return count;
-    }
-
-    static bool ContainsDigit(int number, int digit)
-    {
-        while (number != 0)
-        {
-            if (number % 10 == digit)
-            {
-                return true;
-            }
-            number /= 10;
-        }
-        return false;
     }
 }
